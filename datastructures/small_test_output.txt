@@ -1,0 +1,25 @@
+def small_interval_tree() -> IntervalTree:
+    tree: IntervalTree[int, Stock] = IntervalTree()
+    tree.insert(100, Stock('AAPL', 'Apple Inc.', 100, 150, '2024-10-21'))
+    tree.insert(200, Stock('GOOG', 'Alphabet Inc.', 200, 250, '2024-10-21'))
+    tree.insert(150, Stock('MSFT', 'Microsoft Corp.', 150, 175, '2024-10-21'))
+    tree.insert(100, Stock('TSLA', 'Tesla Inc.', 100, 160, '2024-10-21'))
+    return tree
+
+
+Range query for stocks with low-high intervals overlapping with [120, 160]:
+Symbol: MSFT, Name: Microsoft Corp., Low: 150, High: 175, Date: 2024-10-21
+Symbol: AAPL, Name: Apple Inc., Low: 100, High: 150, Date: 2024-10-21
+Symbol: TSLA, Name: Tesla Inc., Low: 100, High: 160, Date: 2024-10-21
+
+Search query for stocks containing price point $120:
+Symbol: AAPL, Name: Apple Inc., Low: 100, High: 150, Date: 2024-10-21
+Symbol: TSLA, Name: Tesla Inc., Low: 100, High: 160, Date: 2024-10-21
+
+Top 2 stocks:
+Symbol: GOOG, Name: Alphabet Inc., Low: 200, High: 250, Date: 2024-10-21
+Symbol: MSFT, Name: Microsoft Corp., Low: 150, High: 175, Date: 2024-10-21
+
+Bottom 2 stocks:
+Symbol: AAPL, Name: Apple Inc., Low: 100, High: 150, Date: 2024-10-21
+Symbol: TSLA, Name: Tesla Inc., Low: 100, High: 160, Date: 2024-10-21

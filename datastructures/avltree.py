@@ -24,19 +24,13 @@ def printing(func):
 
 
 class AVLTree(Generic[K, V]):
-    def __init__(self):
-        self._root: Optional[AVLTree.AVLNode[K, V]] = None
-        # if self.initial is not None:
-            # for key, value in self.initial:
-            #     self.insert(key, value)
-
     class AVLNode(Generic[K, V]):
         def __init__(self, key: K, value: V):
             self.key = key
             self.value = value
+            self.left: Optional['AVLTree.AVLNode[K, V]'] = None
+            self.right: Optional['AVLTree.AVLNode[K, V]'] = None
             self.height = 1
-            self.left: Optional[AVLTree.AVLNode] = None
-            self.right: Optional[AVLTree.AVLNode] = None
         
         def set_left(self, node: Optional['AVLTree.AVLNode']) -> None:
             self.left = node
@@ -44,16 +38,25 @@ class AVLTree(Generic[K, V]):
         def set_right(self, node: Optional['AVLTree.AVLNode']) -> None:
             self.right = node
 
+        def __repr__(self):
+            return f"[SELF.KEY = {self.key}, SELF.VALUE = {self.value}]"
+        
+        def __str__(self):
+            return f"[{self.key, self.value}]"
+
+
+    def __init__(self):
+        self._root: Optional['AVLTree.AVLNode[K, V]'] = None
+     
     def insert(self, key: K, value: V) -> None:
         if self._root == None:
             self._root = self.AVLNode(key, value)
         else:
-            self._insert(self._root, key, value)
+            self._root = self._insert(self._root, key, value) ##maybe broken change
         
-    def _insert(self, node, key, value) -> Optional[AVLNode[K, V]]:
-        if not isinstance(key, int):
-            raise ValueError("Key must be integer value")
+    def _insert(self, node: 'AVLTree.AVLNode[K, V]', key, value) -> Optional[AVLNode[K, V]]:
         if key == node.key:
+            # node.values.append(value)
             raise ValueError("Key already exists in tree.")
         
         if key > node.key:
@@ -136,7 +139,7 @@ class AVLTree(Generic[K, V]):
         
         return new_root
 
-    def get_parent(self, key: int) -> Optional[AVLNode[K, V]]:
+    def get_parent(self, key: int) -> Optional['AVLTree.AVLNode[K, V]']:
         if self._root is None or self._root.key == key:
             return None
 
@@ -155,7 +158,7 @@ class AVLTree(Generic[K, V]):
 
         return None
 
-    def _height(self, node: AVLNode[K, V]) -> int:
+    def _height(self, node: 'AVLTree.AVLNode[K, V]') -> int:
         if node is None:
             return 0
         return node.height
@@ -163,12 +166,12 @@ class AVLTree(Generic[K, V]):
     def search(self, key: K) -> Optional[V]:
         return self._search(key, self._root)
   
-    def _search(self, key: K, node: AVLNode[K, V]) -> Optional[AVLNode[K, V]]:
+    def _search(self, key: K, node: 'AVLTree.AVLNode[K, V]') -> Optional['AVLTree.AVLNode[K, V]']:
         if node is None:
-            return "Not found"
+            return None
         
         if key == node.key:
-            return node.value
+            return node
         
         if key > node.key:
             return self._search(key, node.right)
@@ -178,7 +181,7 @@ class AVLTree(Generic[K, V]):
     def delete(self, key: K) -> None:
         self._root = self._delete(self._root, key)
 
-    def _delete(self, node: AVLNode[K, V], key: K) -> Optional[AVLNode[K, V]]:
+    def _delete(self, node: 'AVLTree.AVLNode[K, V]', key: K) -> Optional['AVLTree.AVLNode[K, V]']:
         if node is None:
             return None
         
@@ -201,7 +204,7 @@ class AVLTree(Generic[K, V]):
         node.height = 1 + max(self._height(node.left), self._height(node.right))
         return self._balance(node)
 
-    def _successor(self, node: AVLNode[K, V]) -> AVLNode[K, V]:
+    def _successor(self, node: 'AVLTree.AVLNode[K, V]') -> 'AVLTree.AVLNode[K, V]':
         current = node
         while current.left is not None:
             current = current.left
@@ -210,7 +213,7 @@ class AVLTree(Generic[K, V]):
     def inorder(self) -> List[K]: # visit: Callable[[V], None] | None = None
         return self._inorder(self._root, [])
 
-    def _inorder(self, node: AVLNode[K, V], list: List[K]) -> list[K]:
+    def _inorder(self, node: 'AVLTree.AVLNode[K, V]', list: List[K]) -> list[K]:
         if node is not None:
             self._inorder(node.left, list)
             list.append(node.key)
@@ -220,7 +223,7 @@ class AVLTree(Generic[K, V]):
     def preorder(self) -> List[K]: #, visit: Callable[[V], None] | None = None
         return self._preorder(self._root, [])
     
-    def _preorder(self, node: Optional[AVLNode], list) -> List[K]:
+    def _preorder(self, node: 'AVLTree.AVLNode[K, V]', list) -> List[K]:
         if node is not None:
             list.append(node.key)
             self._preorder(node.left, list)
@@ -230,7 +233,7 @@ class AVLTree(Generic[K, V]):
     def postorder(self) -> List[K]: #, visit: Callable[[V], None] | None = None
         return self._postorder(self._root, [])
     
-    def _postorder(self, node: AVLNode[K, V], list: List[K]) -> List[K]:
+    def _postorder(self, node: 'AVLTree.AVLNode[K, V]', list: List[K]) -> List[K]:
         if node is not None:
             self._postorder(node.left, list)
             self._postorder(node.right, list)
@@ -245,7 +248,7 @@ class AVLTree(Generic[K, V]):
         return list
             
     
-    def _bforder(self, node: AVLNode[K, V], level: int, list: List[K]) -> None:
+    def _bforder(self, node: 'AVLTree.AVLNode[K, V]', level: int, list: List[K]) -> None:
         if node is None:
             return
         elif level == 1:    
@@ -259,9 +262,8 @@ class AVLTree(Generic[K, V]):
     def size(self) -> int:
         return len(self.inorder())
 
-
     def __str__(self) -> str:
-        def draw_tree(node: Optional[self.AVLNode[K, V]], level: int=0) -> None:
+        def draw_tree(node: Optional['AVLTree.AVLNode[K, V]'], level: int=0) -> None:
             if not node:
                 return
             draw_tree(node.right, level + 1)
