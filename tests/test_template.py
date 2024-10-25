@@ -1,17 +1,20 @@
-# This is a file you can copy/paste to create a new test file.
-# Just make sure the new name starts with test_ and ends with .py.
+import pytest
+import unittest
+# from datastructures.iavltree import IAVLTree
+from avltree import AVLTree
 
-# import data structures like this:
-# from datastructures.array import Array
+def test_avltree_creation():
+    tree = AVLTree()
+    assert tree is not None
+# class TestClassTemplate:
+#     # tree = AVLTree()
+
+#     def test_method_template(self):
+#         # Arrange (set up your test data)
 
 
-class TestClassTemplate:
-    def test_method_template(self):
-        # Arrange (set up your test data)
+#         # Act (perform the action you want to test)
 
 
-        # Act (perform the action you want to test)
-
-
-        # Assert (check that the test is passing)
-        pass
+#         # Assert (check that the test is passing)
+#         pass
