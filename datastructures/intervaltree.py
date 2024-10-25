@@ -217,7 +217,6 @@ if __name__ == '__main__':
     ]
 
     for symbol, name, low, high in stocks:
-        # Insert the intervals into the tree
         tree.insert(symbol, name, low, high)
 
     print(f"str: {tree.__str__()}")
